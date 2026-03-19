@@ -1,31 +1,27 @@
 package com.nexcircle.application.user.usecase;
 
-import com.nexcircle.application.user.dto.UserRegister;
 import com.nexcircle.application.user.dto.UserResponse;
 import com.nexcircle.application.user.mapper.UserMapper;
-import com.nexcircle.domain.user.entity.User;
 import com.nexcircle.domain.user.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class RegisterUserUseCase {
+public class GetCurrentUserUseCase {
     UserRepository userRepository;
     UserMapper userMapper;
-    PasswordEncoder passwordEncoder;
 
-    public UserResponse registerUser(UserRegister userRegister){
-        log.debug("Register user");
-
-        User u = this.userMapper.toEntity(userRegister);
-        u.setPassword(this.passwordEncoder.encode(userRegister.getPassword()));
-        return this.userMapper.toDto(this.userRepository.save(u));
+    public UserResponse getCurrentUser() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        return this.userMapper.toDto(this.userRepository.findByUsername(username));
     }
 }

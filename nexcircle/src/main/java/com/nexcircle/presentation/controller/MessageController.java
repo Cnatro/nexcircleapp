@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MessageController {
     SendMessUseCase sendMessUseCase;
 
-    @PostMapping
+    @PostMapping("/send")
     public ApiResponse<MessageResponse> send(@RequestBody SendMessRequest request) {
 
         MessageResponse response = this.sendMessUseCase.sendMessage(request);
