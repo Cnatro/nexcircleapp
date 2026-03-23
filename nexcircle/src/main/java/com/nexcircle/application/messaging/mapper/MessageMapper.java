@@ -9,6 +9,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface MessageMapper {
-    Message toEntity(SendMessRequest request);
+    Message toEntity(SendMessRequest request);// xoa di
     MessageResponse toDto(Message message);
 }

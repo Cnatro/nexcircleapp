@@ -1,30 +1,35 @@
 package com.nexcircle.domain.call.entity;
 
 import com.nexcircle.domain.user.entity.User;
-import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-@Table(name = "call_sessions")
-@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter @NoArgsConstructor @AllArgsConstructor @Builder
 public class CallSession {
-
-    @Id
     private UUID id;
-
-    @ManyToOne
-    @JoinColumn(name = "caller_id", nullable = false)
     private User caller;
-
     private String type;
     private String status;
     private LocalDateTime startedAt;
     private LocalDateTime endedAt;
 
-    @PrePersist
-    public void prePersist() {
-        if (id == null) id = UUID.randomUUID();
+    // Business Logic: Khởi tạo một cuộc gọi mới
+    public static CallSession createPending(User caller, String type) {
+        return CallSession.builder()
+                .id(UUID.randomUUID())
+                .caller(caller)
+                .type(type)
+                .status("PENDING")
+                .startedAt(LocalDateTime.now())
+                .build();
+    }
+
+    // Business Logic: Chấp nhận cuộc gọi
+    public void accept() {
+        if (!"PENDING".equals(this.status)) {
+            throw new IllegalStateException("Only pending calls can be accepted");
+        }
+        this.status = "ACCEPTED";
     }
 }

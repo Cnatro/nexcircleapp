@@ -23,9 +23,14 @@ public class RegisterUserUseCase {
 
     public UserResponse registerUser(UserRegister userRegister){
         log.debug("Register user");
+        User u = User.create(
+                userRegister.getUsername(),
+                userRegister.getEmail(),
+                userRegister.getPassword()
+        );
+        u.encodePassword(this.passwordEncoder.encode(userRegister.getPassword()));
 
-        User u = this.userMapper.toEntity(userRegister);
-        u.setPassword(this.passwordEncoder.encode(userRegister.getPassword()));
+//        u.setPassword(this.passwordEncoder.encode(userRegister.getPassword()));
         return this.userMapper.toDto(this.userRepository.save(u));
     }
 }
