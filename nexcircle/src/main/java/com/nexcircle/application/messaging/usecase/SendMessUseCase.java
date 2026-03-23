@@ -21,4 +21,21 @@ public class SendMessUseCase {
         Message mess = this.messageMapper.toEntity(request);
         return this.messageMapper.toDto(this.messageRepository.save(mess));
     }
+
+//    public MessageResponse sendMessage(SendMessRequest request){
+//
+//        Conversation conversation = conversationRepository.findById(request.getConversationId())
+//                .orElseThrow(...);
+//
+//        User sender = userRepository.findById(request.getSenderId())
+//                .orElseThrow(...);
+//
+//        Message mess = Message.create(
+//                conversation,
+//                sender,
+//                request.getContent()
+//        );
+//
+//        return messageMapper.toDto(messageRepository.save(mess));
+//    }
 }

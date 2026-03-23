@@ -9,6 +9,9 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 @Mapper(componentModel = "spring",
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface UserMapper {
-    User toEntity(UserRegister register);
+//    User toEntity(UserRegister register); //DTO → Domain không nên qua mapper ❌
     UserResponse toDto(User user);
 }
+//CREATE → factory method 🔥
+//UPDATE → method trong domain 🔥
+//READ → mapper 🔥

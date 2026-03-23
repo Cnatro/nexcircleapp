@@ -4,6 +4,8 @@ import com.nexcircle.application.user.dto.UserLogin;
 import com.nexcircle.application.user.mapper.UserMapper;
 import com.nexcircle.domain.user.entity.User;
 import com.nexcircle.domain.user.repository.UserRepository;
+import com.nexcircle.shared.enums.MessageCode;
+import com.nexcircle.shared.exception.AppException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,7 +26,8 @@ public class LoginUserUseCase  {
     PasswordEncoder passwordEncoder;
 
     public Boolean isLogin(UserLogin userLogin){
-        User u = this.userRepository.findByUsername(userLogin.getUsername());
+        User u = this.userRepository.findByUsername(userLogin.getUsername())
+                .orElseThrow(() -> new AppException(MessageCode.USER_NOT_FOUND));
         if( u == null) return false;
         return this.passwordEncoder.matches(userLogin.getPassword(), u.getPassword());
     }

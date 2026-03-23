@@ -3,6 +3,8 @@ package com.nexcircle.application.user.usecase;
 import com.nexcircle.application.user.dto.UserResponse;
 import com.nexcircle.application.user.mapper.UserMapper;
 import com.nexcircle.domain.user.repository.UserRepository;
+import com.nexcircle.shared.enums.MessageCode;
+import com.nexcircle.shared.exception.AppException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +24,8 @@ public class GetCurrentUserUseCase {
     public UserResponse getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-        return this.userMapper.toDto(this.userRepository.findByUsername(username));
+        var user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(MessageCode.USER_NOT_FOUND));
+        return userMapper.toDto(user);
     }
 }
