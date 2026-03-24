@@ -1,0 +1,14 @@
+package com.nexcircle.application.messaging.mapper;
+
+import com.nexcircle.application.messaging.dto.ConversationRequest;
+import com.nexcircle.application.messaging.dto.ConversationResponse;
+import com.nexcircle.domain.messaging.entity.Conversation;
+import org.mapstruct.Mapper;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+
+@Mapper(componentModel = "spring",
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface ConversationMapper {
+    Conversation toEntity(ConversationRequest request);
+    ConversationResponse toDto(Conversation conversation);
+}
