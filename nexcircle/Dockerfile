@@ -22,7 +22,7 @@ FROM eclipse-temurin:21-jdk-alpine
 WORKDIR /app
 
 # Copy JAR từ stage builder
-COPY --from=builder /app/target/nexcircleapp-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=builder /app/target/nexcircle-0.0.1-SNAPSHOT.jar app.jar
 
 # Mở port 8081
 EXPOSE 8081
