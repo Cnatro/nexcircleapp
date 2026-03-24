@@ -1,8 +1,8 @@
 package com.nexcircle.presentation.controller;
 
-import com.nexcircle.application.messaging.dto.MessageResponse;
-import com.nexcircle.application.messaging.dto.SendMessRequest;
-import com.nexcircle.application.messaging.usecase.SendMessUseCase;
+import com.nexcircle.application.messaging.dto.ConversationRequest;
+import com.nexcircle.application.messaging.dto.ConversationResponse;
+import com.nexcircle.application.messaging.usecase.CreateConversationUseCase;
 import com.nexcircle.shared.dto.ApiResponse;
 import com.nexcircle.shared.enums.MessageCode;
 import com.nexcircle.shared.utils.ResponseFactory;
@@ -18,18 +18,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-@RequestMapping("/messages")
+@RequestMapping("/conversations")
 @Slf4j
-public class MessageController {
-    SendMessUseCase sendMessUseCase;
+public class ConversationController {
+    CreateConversationUseCase createConversationUseCase;
 
-    @PostMapping("/send")
-    public ApiResponse<MessageResponse> send(@RequestBody SendMessRequest request) {
-        log.debug("send message");
-        MessageResponse response = this.sendMessUseCase.sendMessage(request);
-
+    @PostMapping("/create")
+    public ApiResponse<ConversationResponse> createConversation(@RequestBody ConversationRequest request) {
+        log.debug("create conversation");
+        ConversationResponse response = this.createConversationUseCase.createConversation(request);
         return ResponseFactory.success(
-                MessageCode.MSG_SENT_SUCCESS,
+                MessageCode.CREATED_SUCCESS,
                 response
         );
     }
