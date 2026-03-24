@@ -1,6 +1,8 @@
 package com.nexcircle.shared.enums;
 
 public enum MessageCode {
+    CREATED_SUCCESS,
+    FAIL,
     // ===== MESSAGE =====
     MSG_SENT_SUCCESS,
     MSG_SENT_FAILED,
