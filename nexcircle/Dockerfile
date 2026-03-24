@@ -24,8 +24,8 @@ WORKDIR /app
 # Copy JAR từ stage builder
 COPY --from=builder /app/target/nexcircleapp-0.0.1-SNAPSHOT.jar app.jar
 
-# Mở port 8080
-EXPOSE 8080
+# Mở port 8081
+EXPOSE 8081
 
 # Environment variables (tùy chỉnh nếu cần)
 ENV JAVA_OPTS="-Xms256m -Xmx512m"
