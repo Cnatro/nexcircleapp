@@ -10,17 +10,20 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Setter
 @Getter
 public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
+    UUID id;
     String username;
     String password;
     List<GrantedAuthority> authorities;
 
     public UserDetails(User user) {
+        this.id = user.getId();
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.authorities = null;
