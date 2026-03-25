@@ -7,11 +7,14 @@ import com.nexcircle.infrastructure.persistence.call.jpa.CallParticipantJpaRepos
 import com.nexcircle.infrastructure.persistence.call.jpa.CallSessionJpaEntity;
 import com.nexcircle.infrastructure.persistence.call.jpa.CallSessionJpaRepository;
 import com.nexcircle.infrastructure.persistence.call.mapper.CallPersistenceMapper;
+import com.nexcircle.shared.enums.MessageCode;
+import com.nexcircle.shared.exception.AppException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -39,5 +42,31 @@ public class CallRepositoryImpl implements CallRepository {
     @Override
     public Optional<CallSession> findCallSessionById(UUID id) {
         return callSessionJpaRepository.findById(id).map(mapper::toCallSessionDomain);
+    }
+
+    @Override
+    public boolean isParticipant(UUID sessionId, UUID userId) {
+        return callParticipantJpaRepository.existByCallSessionIdAndUserId(sessionId, userId);
+    }
+
+    @Override
+    public void updateParticipantStatus(UUID sessionId, UUID userId, LocalDateTime joinedAt, LocalDateTime leftAt) {
+        var participant = callParticipantJpaRepository.findByCallSessionIdAndUserId(sessionId, userId)
+                .orElseThrow(() -> new AppException(MessageCode.CALL_PARTICIPANT_NOT_FOUND));
+
+        if (joinedAt != null) participant.setJoinedAt(joinedAt);
+        if (leftAt != null) participant.setLeftAt(leftAt);
+
+        callParticipantJpaRepository.save(participant);
+    }
+
+    public CallSession findAndVerifyParticipant(UUID sessionId, UUID userId) {
+        CallSession session = findCallSessionById(sessionId)
+                .orElseThrow(() -> new AppException(MessageCode.CALL_NOT_FOUND));
+
+        if (!isParticipant(sessionId, userId)) {
+            throw new AppException(MessageCode.UNAUTHORIZED, "You are not allowed to action this call");
+        }
+        return session;
     }
 }
