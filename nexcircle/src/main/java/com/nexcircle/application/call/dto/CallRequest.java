@@ -1,5 +1,6 @@
 package com.nexcircle.application.call.dto;
 
+import com.nexcircle.domain.call.enums.CallType;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -19,5 +20,5 @@ public class CallRequest {
     UUID receiverId;
 
     @NotBlank(message = "Call type is required")
-    String type;
+    CallType type;
 }
