@@ -8,5 +8,5 @@ import java.util.UUID;
 
 public interface CallParticipantJpaRepository extends JpaRepository<CallParticipantJpaEntity, UUID> {
     Optional<CallParticipantJpaEntity> findByCallSessionIdAndUserId(UUID sessionId, UUID userId);
-    boolean existByCallSessionIdAndUserId(UUID sessionId, UUID userId);
+    boolean existsByCallSessionIdAndUserId(UUID sessionId, UUID userId);
 }

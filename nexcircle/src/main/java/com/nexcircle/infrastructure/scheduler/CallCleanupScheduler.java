@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+/// Xử lý cho video call
 public class CallCleanupScheduler {
     private final CallSessionJpaRepository sessionRepository;
     // private final SignalingService signalingService; // Để báo cho FE tắt màn hình chờ

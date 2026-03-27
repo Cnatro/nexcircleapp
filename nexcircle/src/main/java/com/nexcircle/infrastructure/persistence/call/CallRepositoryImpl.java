@@ -46,7 +46,7 @@ public class CallRepositoryImpl implements CallRepository {
 
     @Override
     public boolean isParticipant(UUID sessionId, UUID userId) {
-        return callParticipantJpaRepository.existByCallSessionIdAndUserId(sessionId, userId);
+        return callParticipantJpaRepository.existsByCallSessionIdAndUserId(sessionId, userId);
     }
 
     @Override

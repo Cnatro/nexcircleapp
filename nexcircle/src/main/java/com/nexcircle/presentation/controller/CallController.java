@@ -2,8 +2,7 @@ package com.nexcircle.presentation.controller;
 
 import com.nexcircle.application.call.dto.CallRequest;
 import com.nexcircle.application.call.dto.CallResponse;
-import com.nexcircle.application.call.usecase.AcceptCallUseCase;
-import com.nexcircle.application.call.usecase.InitiateCallUseCase;
+import com.nexcircle.application.call.usecase.*;
 import com.nexcircle.shared.dto.ApiResponse;
 import com.nexcircle.shared.enums.MessageCode;
 import com.nexcircle.shared.utils.ResponseFactory;
@@ -12,7 +11,6 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.aspectj.weaver.ast.Call;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -25,6 +23,9 @@ import java.util.UUID;
 public class CallController {
     InitiateCallUseCase initiateCallUseCase;
     AcceptCallUseCase acceptCallUseCase;
+    EndCallUseCase endCallUseCase;
+    RejectCallUseCase  rejectCallUseCase;
+    CancelCallUseCase cancelCallUseCase;
 
     @PostMapping("/initiate")
     public ApiResponse<CallResponse> initiate(@Valid @RequestBody CallRequest request){
@@ -35,6 +36,24 @@ public class CallController {
     @PatchMapping("/{sessionId}/accept")
     public ApiResponse<CallResponse> acceptCall(@PathVariable UUID sessionId) {
         CallResponse response = acceptCallUseCase.execute(sessionId);
-        return ResponseFactory.success(MessageCode.CALL_ACCEPT_ACCEPT, response);
+        return ResponseFactory.success(MessageCode.CALL_ACCEPT, response);
+    }
+
+    @PatchMapping("/{sessionId}/reject")
+    public ApiResponse<Void> rejectCall(@PathVariable UUID sessionId) {
+        rejectCallUseCase.execute(sessionId);
+        return ResponseFactory.success(MessageCode.CALL_REJECT, null );
+    }
+
+    @PatchMapping("/{sessionId}/end")
+    public ApiResponse<Void> endCall(@PathVariable UUID sessionId) {
+        endCallUseCase.execute(sessionId);
+        return ResponseFactory.success(MessageCode.CALL_END, null);
+    }
+
+    @PatchMapping("/{sessionId}/cancel")
+    public ApiResponse<Void> cancelCall(@PathVariable UUID sessionId) {
+        cancelCallUseCase.execute(sessionId);
+        return ResponseFactory.success(MessageCode.CALL_CANCEL, null);
     }
 }
