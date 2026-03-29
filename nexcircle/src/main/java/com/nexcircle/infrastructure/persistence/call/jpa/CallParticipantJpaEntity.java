@@ -7,7 +7,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "call_participants")
+@Table(name = "call_participants", indexes = {
+        @Index(name = "idx_participant_session_user", columnList = "call_id, user_id", unique = true)
+})
 @Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class CallParticipantJpaEntity {
     @Id

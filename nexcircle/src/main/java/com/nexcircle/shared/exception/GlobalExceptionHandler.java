@@ -4,7 +4,9 @@ import com.nexcircle.shared.dto.ApiResponse;
 import com.nexcircle.shared.enums.MessageCode;
 import com.nexcircle.shared.utils.ResponseFactory;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -32,5 +34,13 @@ public class GlobalExceptionHandler {
     public  ResponseEntity<ApiResponse<Void>> handleGenericException(Exception ex){
         log.error("Uncaught exception occurred: ", ex);
         return ResponseEntity.internalServerError().body(ResponseFactory.error(MessageCode.INTERNAL_SERVER_ERROR));
+    }
+
+    //Catch exception when both people click accept and cancle
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<ApiResponse<Void>> handleOptimisticLockingFailure(ObjectOptimisticLockingFailureException ex) {
+        log.warn("Conflict detected: Call state was updated by another user.");
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(ResponseFactory.error(MessageCode.CALL_FAILED)); // Hoặc một code ACTION_CONFLICT
     }
 }
