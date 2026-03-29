@@ -11,4 +11,5 @@ public interface UserRepository {
     Optional<User> findByUsername(String username);
     Optional<User> findById(UUID id);
     List<User>findUserInIds(List<UUID> ids);
+    User findUserReceiptMessageByConversationIdAndUserId(UUID converId, UUID userSenderId);
 }
