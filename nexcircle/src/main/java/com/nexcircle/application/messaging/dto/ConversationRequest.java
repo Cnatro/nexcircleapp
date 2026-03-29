@@ -14,6 +14,5 @@ import java.util.UUID;
 public class ConversationRequest {
     String type; // private or group
     UUID lastMessageId;
-
     List<UUID> userIds;
 }
