@@ -9,6 +9,7 @@ public class ResponseFactory {
 
     private static HttpStatus mapHttpStatus(MessageCode code) {
         switch (code) {
+            case SUCCESS:
             case CREATED_SUCCESS:
             case MSG_SENT_SUCCESS:
             case USER_CREATED_SUCCESS:
