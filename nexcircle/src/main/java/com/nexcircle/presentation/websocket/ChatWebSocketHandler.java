@@ -4,16 +4,14 @@ import com.nexcircle.application.messaging.dto.MessageResponse;
 import com.nexcircle.application.messaging.dto.SendMessRequest;
 import com.nexcircle.application.messaging.usecase.SendMessUseCase;
 import com.nexcircle.application.user.dto.UserResponse;
-import com.nexcircle.application.user.usecase.LoadUserUseCase;
+import com.nexcircle.application.user.usecase.GetUserUseCase;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -22,7 +20,7 @@ import org.springframework.stereotype.Controller;
 @Slf4j
 public class ChatWebSocketHandler {
     SendMessUseCase sendMessUseCase;
-    LoadUserUseCase loadUserUseCase;
+    GetUserUseCase loadUserUseCase;
     SimpMessagingTemplate simpMessagingTemplate;
 
     @MessageMapping("/send/group")
@@ -33,6 +31,7 @@ public class ChatWebSocketHandler {
 
     @MessageMapping("/send/private")
     public void sendToUser(@Payload SendMessRequest request){
+        System.out.println("HIT HERE");
             UserResponse userReceipt = this.loadUserUseCase.getUserReceiptMessage(request);
             MessageResponse res = this.sendMessUseCase.sendMessage(request);
 
