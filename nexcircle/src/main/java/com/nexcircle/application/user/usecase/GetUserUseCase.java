@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class LoadUserUseCase {
+public class GetUserUseCase {
     UserRepository userRepository;
     UserMapper userMapper;
 
