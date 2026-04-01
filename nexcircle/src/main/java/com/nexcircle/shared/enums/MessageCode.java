@@ -2,6 +2,7 @@ package com.nexcircle.shared.enums;
 
 public enum MessageCode {
     CREATED_SUCCESS,
+    SUCCESS,
     FAIL,
     // ===== MESSAGE =====
     MSG_SENT_SUCCESS,
@@ -29,5 +30,8 @@ public enum MessageCode {
 
     UNAUTHORIZED,
 
+    FRIEND_REQUEST_NOT_FOUND,
+    FRIEND_REQUEST_ALREADY_PROCESSED,
+    FRIENDSHIP_ALREADY_EXISTS,
 
 }
