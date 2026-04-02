@@ -5,6 +5,7 @@ import com.nexcircle.application.user.dto.FriendRqResponseDto;
 import com.nexcircle.application.user.mapper.FriendRequestMapper;
 import com.nexcircle.domain.user.entity.FriendRequest;
 import com.nexcircle.domain.user.repository.FriendRequestRepository;
+import com.nexcircle.domain.user.service.SecurityContextService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -24,11 +25,12 @@ import java.util.List;
 public class GetSentFriendRequestsUseCase {
     FriendRequestRepository friendRequestRepository;
     FriendRequestMapper friendRequestMapper;
+    SecurityContextService securityContextService;
 
-    public Page<FriendRqResponseDto> getFriendRequestsByStatusAndReceiverId(FriendRequestFilter filter){
+    public Page<FriendRqResponseDto> getFriendRequestsByStatusAndReceiverId(FriendRequestFilter filter) {
 
         Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize(), Sort.by("createdAt").descending());
-        return this.friendRequestRepository.findAllByStatusAndReceiverId(filter.getStatus(),filter.getReceiverId(), pageable)
+        return this.friendRequestRepository.findAllByStatusAndReceiverId(filter.getStatus(), this.securityContextService.getCurrentUserId(), pageable)
                 .map(fr -> new FriendRqResponseDto(
                         fr.getId(),
                         fr.getSenderId(),
