@@ -8,6 +8,8 @@ import com.nexcircle.infrastructure.persistence.user.mapper.UserPersistenceMappe
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -47,5 +49,12 @@ public class UserRepositoryImpl implements UserRepository {
     public User findUserReceiptMessageByConversationIdAndUserId(UUID converId, UUID userSenderId) {
         UserJpaEntity userJpa = this.userJpaRepository.findUserReceiptMessageByConversationIdAndUserId(converId, userSenderId);
         return this.userMapper.toUserDomain(userJpa);
+    }
+
+    @Override
+    public Page<User> findNearByUsers(Pageable pageable) {
+        return this.userJpaRepository
+                .findAll(pageable)
+                .map(this.userMapper::toUserDomain);
     }
 }
