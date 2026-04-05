@@ -2,6 +2,7 @@ package com.nexcircle.application.call.usecase;
 
 import com.nexcircle.application.call.dto.CallRequest;
 import com.nexcircle.application.call.dto.CallResponse;
+import com.nexcircle.application.call.dto.SignalMessage;
 import com.nexcircle.application.call.mapper.CallMapper;
 import com.nexcircle.domain.call.entity.CallParticipant;
 import com.nexcircle.domain.call.entity.CallSession;
@@ -47,6 +48,15 @@ public class InitiateCallUseCase {
                 .user(receiver)
                 .build();
         callRepository.saveParticipant(participant);
+
+//        SignalMessage ringSignal = SignalMessage.builder()
+//                .type("INCOMING_CALL")
+//                .fromUserId(session.getCaller().getId().toString())
+//                .toUserId(request.getReceiverId())
+//                .sessionId(session.getId())
+//                .build();
+//
+//        signalingHandler.sendSignal(request.getReceiverId(), ringSignal);
 
         return callMapper.toCallResponse(savedSession);
     }
