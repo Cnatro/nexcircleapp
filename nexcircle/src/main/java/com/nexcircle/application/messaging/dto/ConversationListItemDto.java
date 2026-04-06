@@ -11,11 +11,13 @@ import java.util.UUID;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ConversationRequest {
+public class ConversationListItemDto {
     UUID id;
+    String type;
     String name;
     String avatar;
-    String type; // private or group
-    UUID lastMessageId;
-    List<UUID> userIds;
+    List<ConversationParticipantItemDto> participants;
+    MessageResponse lastMessage;
+    int unreadCount;
+    boolean isMute; // tắt thông báo hay không
 }
