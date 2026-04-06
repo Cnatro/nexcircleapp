@@ -5,6 +5,7 @@ import com.nexcircle.application.user.dto.UserFilter;
 import com.nexcircle.application.user.dto.UserResponse;
 import com.nexcircle.application.user.mapper.UserMapper;
 import com.nexcircle.domain.user.repository.UserRepository;
+import com.nexcircle.domain.user.service.SecurityContextService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 public class GetUserUseCase {
     UserRepository userRepository;
     UserMapper userMapper;
+    SecurityContextService securityContextService;
 
     public UserResponse getUserReceiptMessage(SendMessRequest request) {
         return this.userMapper.toDto(
@@ -34,6 +36,6 @@ public class GetUserUseCase {
     public Page<UserResponse> getNearbyUsers(UserFilter filter){
         Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize(), Sort.by("createdAt").descending());
 
-        return this.userRepository.findNearByUsers(pageable).map(this.userMapper::toDto);
+        return this.userRepository.findNearByUsers(this.securityContextService.getCurrentUserId(), pageable).map(this.userMapper::toDto);
     }
 }

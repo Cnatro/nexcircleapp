@@ -14,5 +14,5 @@ public interface UserRepository {
     Optional<User> findById(UUID id);
     List<User>findUserInIds(List<UUID> ids);
     User findUserReceiptMessageByConversationIdAndUserId(UUID converId, UUID userSenderId);
-    Page<User> findNearByUsers(Pageable pageable);
+    Page<User> findNearByUsers(UUID currentUserId,Pageable pageable);
 }

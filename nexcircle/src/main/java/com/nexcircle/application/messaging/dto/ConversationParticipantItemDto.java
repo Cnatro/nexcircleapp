@@ -3,7 +3,6 @@ package com.nexcircle.application.messaging.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -11,11 +10,11 @@ import java.util.UUID;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ConversationRequest {
+public class ConversationParticipantItemDto {
     UUID id;
-    String name;
-    String avatar;
-    String type; // private or group
-    UUID lastMessageId;
-    List<UUID> userIds;
+    UUID userId;
+    String fullName;
+    String userName;
+    String avatarUrl;
+    Boolean isOnline;
 }

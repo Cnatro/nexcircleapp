@@ -13,6 +13,9 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class MessageResponse {
     UUID id;
+    UUID senderId;
     String content;
+    String messageType;
+    UUID parentMessageId; // reply
     LocalDateTime createdAt;
 }
