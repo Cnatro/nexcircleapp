@@ -34,7 +34,7 @@ public class FriendShipController {
                 MessageCode.SUCCESS,
                 Map.of(
                         "data", dtos.getContent(),
-                        "total", dtos.getTotalPages()
+                        "total", dtos.getTotalElements()
                 )
         );
     }

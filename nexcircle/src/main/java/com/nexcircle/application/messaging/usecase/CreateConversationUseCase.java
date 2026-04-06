@@ -9,13 +9,13 @@ import com.nexcircle.domain.messaging.repository.ConversationParticipantReposito
 import com.nexcircle.domain.messaging.repository.ConversationRepository;
 import com.nexcircle.domain.user.entity.User;
 import com.nexcircle.domain.user.repository.UserRepository;
+import com.nexcircle.domain.user.service.SecurityContextService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,12 +25,27 @@ public class CreateConversationUseCase {
     UserRepository userRepository;
     ConversationParticipantRepository conversationParticipantRepository;
     ConversationMapper conversationMapper;
+    SecurityContextService securityContextService;
 
     public ConversationResponse createConversation(ConversationRequest request) {
+
+        Set<UUID> userSet = new HashSet<>(request.getUserIds());
+        userSet.add(this.securityContextService.getCurrentUserId());
+
+        List<UUID> allUserIds = new ArrayList<>(userSet);
+
+        Optional<Conversation> existingConversation =
+                this.conversationRepository
+                        .findExactConversation(allUserIds, allUserIds.size(),request.getType());
+
+        if(existingConversation.isPresent()){
+            return this.conversationMapper.toDto(existingConversation.get());
+        }
+
         Conversation conversation = this.conversationMapper.toEntity(request);
         Conversation savedConversation = conversationRepository.save(conversation);
 
-        List<User> users = this.userRepository.findUserInIds(request.getUserIds());
+        List<User> users = this.userRepository.findUserInIds(allUserIds);
         List<ConversationParticipant> conversationParticipants = users.stream()
                 .map(user -> ConversationParticipant.builder()
                         .conversation(savedConversation)
