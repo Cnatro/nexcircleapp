@@ -13,6 +13,8 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConversationResponse {
     UUID id;
+    String name;
+    String avatar;
     String type; // private or group
     UUID lastMessageId;
     LocalDateTime createdAt;
