@@ -17,6 +17,9 @@ public class ConversationJpaEntity {
     @Id
     private UUID id;
 
+    private String name;
+    private String avatar;
+
     private String type;
     private UUID lastMessageId;
     private LocalDateTime createdAt;

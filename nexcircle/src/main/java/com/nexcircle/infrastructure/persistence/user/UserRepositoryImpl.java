@@ -52,9 +52,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Page<User> findNearByUsers(Pageable pageable) {
+    public Page<User> findNearByUsers(UUID currentUserId, Pageable pageable) {
         return this.userJpaRepository
-                .findAll(pageable)
+                .findByIdNot(currentUserId,pageable)
                 .map(this.userMapper::toUserDomain);
     }
 }
