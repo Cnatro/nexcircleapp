@@ -46,7 +46,7 @@ public class FriendRequestController {
                 MessageCode.SUCCESS,
                 Map.of(
                         "data", rqResponseDtos.getContent(),
-                        "total", rqResponseDtos.getTotalPages()
+                        "total", rqResponseDtos.getTotalElements()
                 )
         );
     }
