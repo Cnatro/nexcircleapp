@@ -42,7 +42,7 @@ public class GetMessagesUseCase {
     MessageReceiptMapper messageReceiptMapper;
 
     public Page<MessageView> getMessageViews(MessageFilter filter){
-        Pageable pageable = PageRequest.of(filter.getPage(),filter.getSize(), Sort.by("createdAt").ascending());
+        Pageable pageable = PageRequest.of(filter.getPage(),filter.getSize(), Sort.by("createdAt").descending());
 
         Page<Message> messagesPage = this.messageRepository.findAllByConversationId(filter.getConversationId(), pageable);
 
