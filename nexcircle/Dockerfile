@@ -25,7 +25,7 @@ WORKDIR /app
 COPY --from=builder /app/target/nexcircle-0.0.1-SNAPSHOT.jar app.jar
 
 # Mở port 8081
-EXPOSE 8081
+# EXPOSE 8081
 
 # Environment variables (tùy chỉnh nếu cần)
 ENV JAVA_OPTS="-Xms256m -Xmx512m"
