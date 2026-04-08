@@ -5,10 +5,15 @@ import com.nexcircle.domain.messaging.repository.ConversationRepository;
 import com.nexcircle.infrastructure.persistence.messaging.jpa.ConversationJpaEntity;
 import com.nexcircle.infrastructure.persistence.messaging.jpa.ConversationJpaRepository;
 import com.nexcircle.infrastructure.persistence.messaging.mapper.ConversationPersistenceMapper;
+import com.nexcircle.infrastructure.persistence.messaging.projection.ConversationListItemProjection;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Repository
 @RequiredArgsConstructor
@@ -23,5 +28,18 @@ public class ConversationRepositoryImpl implements ConversationRepository {
                 .toConversationJpaEntity(conversation);
         ConversationJpaEntity conversationSaved = this.conversationJpaRepository.save(conversationJpa);
         return this.conversationPersistenceMapper.toConversationEntity(conversationSaved);
+    }
+
+    @Override
+    public List<ConversationListItemProjection> findAllConversationWithUserLogin(UUID userId) {
+        return this.conversationJpaRepository.findAllConversationWithUserLogin(userId);
+    }
+
+    @Override
+    public Optional<Conversation> findExactConversation(List<UUID> userIds, long szie, String type) {
+
+        return this.conversationJpaRepository
+                .findExactConversation(userIds,szie, type)
+                .map(this.conversationPersistenceMapper::toConversationEntity);
     }
 }

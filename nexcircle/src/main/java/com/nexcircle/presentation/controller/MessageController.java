@@ -1,7 +1,10 @@
 package com.nexcircle.presentation.controller;
 
+import com.nexcircle.application.messaging.dto.MessageFilter;
 import com.nexcircle.application.messaging.dto.MessageResponse;
+import com.nexcircle.application.messaging.dto.MessageView;
 import com.nexcircle.application.messaging.dto.SendMessRequest;
+import com.nexcircle.application.messaging.usecase.GetMessagesUseCase;
 import com.nexcircle.application.messaging.usecase.SendMessUseCase;
 import com.nexcircle.shared.dto.ApiResponse;
 import com.nexcircle.shared.enums.MessageCode;
@@ -10,10 +13,10 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,16 +24,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/messages")
 @Slf4j
 public class MessageController {
-    SendMessUseCase sendMessUseCase;
+    GetMessagesUseCase getMessagesUseCase;
 
-    @PostMapping("/send")
-    public ApiResponse<MessageResponse> send(@RequestBody SendMessRequest request) {
+    @GetMapping
+    public ApiResponse<Map<String, Object>> send(@ModelAttribute MessageFilter filter) {
         log.debug("send message");
-        MessageResponse response = this.sendMessUseCase.sendMessage(request);
+        Page<MessageView>  messageViews = this.getMessagesUseCase.getMessageViews(filter);
 
         return ResponseFactory.success(
-                MessageCode.MSG_SENT_SUCCESS,
-                response
+                MessageCode.SUCCESS,
+                Map.of("data",messageViews.getContent(),
+                        "total", messageViews.getTotalElements()
+                )
         );
     }
 }

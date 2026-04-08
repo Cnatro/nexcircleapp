@@ -12,6 +12,9 @@ import java.util.UUID;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SendMessRequest {
     UUID senderId;
+    UUID receiverId;
     UUID conversationId;
     String content;
+    String messageType;
+    UUID parentMessageId;
 }

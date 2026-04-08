@@ -1,9 +1,11 @@
 package com.nexcircle.application.messaging.dto;
 
+import com.nexcircle.application.user.dto.UserResponse;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -11,11 +13,15 @@ import java.util.UUID;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ConversationResponse {
+public class MessageView {
     UUID id;
-    String name;
-    String avatar;
-    String type; // private or group
-    UUID lastMessageId;
+
+    String content;
+    String messageType;
     LocalDateTime createdAt;
+    UUID parentMessageId;
+
+    UserResponse sender;
+    List<AttachmentSummary> attachments;
+    List<MessageReceiptSummary> messageReceipts;
 }

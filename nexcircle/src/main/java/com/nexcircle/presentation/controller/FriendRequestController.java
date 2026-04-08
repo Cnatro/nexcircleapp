@@ -29,7 +29,7 @@ public class FriendRequestController {
     GetSentFriendRequestsUseCase getSentFriendRequestsUseCase;
     AcceptFriendRequestUseCase acceptFriendRequestUseCase;
 
-    @PostMapping("/add")
+    @PostMapping
     public ApiResponse<String> sentFrRequest(@RequestBody FriendRequestDto dto) {
         this.sendFriendRequestUseCase.createFrRequest(dto);
         return ResponseFactory.success(
@@ -46,7 +46,7 @@ public class FriendRequestController {
                 MessageCode.SUCCESS,
                 Map.of(
                         "data", rqResponseDtos.getContent(),
-                        "total", rqResponseDtos.getTotalPages()
+                        "total", rqResponseDtos.getTotalElements()
                 )
         );
     }

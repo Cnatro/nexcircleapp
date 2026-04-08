@@ -11,11 +11,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ConversationResponse {
+public class MessageReceiptSummary {
     UUID id;
-    String name;
-    String avatar;
-    String type; // private or group
-    UUID lastMessageId;
-    LocalDateTime createdAt;
+    LocalDateTime readAt;
 }

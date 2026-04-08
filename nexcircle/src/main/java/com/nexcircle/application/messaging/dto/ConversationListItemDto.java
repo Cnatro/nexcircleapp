@@ -3,7 +3,7 @@ package com.nexcircle.application.messaging.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -11,11 +11,13 @@ import java.util.UUID;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ConversationResponse {
+public class ConversationListItemDto {
     UUID id;
+    String type;
     String name;
     String avatar;
-    String type; // private or group
-    UUID lastMessageId;
-    LocalDateTime createdAt;
+    List<ConversationParticipantItemDto> participants;
+    MessageResponse lastMessage;
+    int unreadCount;
+    boolean isMute; // tắt thông báo hay không
 }

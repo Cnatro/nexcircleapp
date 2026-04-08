@@ -1,9 +1,9 @@
 package com.nexcircle.application.messaging.dto;
 
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @NoArgsConstructor
@@ -11,11 +11,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ConversationResponse {
+public class AttachmentSummary {
     UUID id;
-    String name;
-    String avatar;
-    String type; // private or group
-    UUID lastMessageId;
-    LocalDateTime createdAt;
+    String fileUrl;
+    String fileType;
+    Integer fileSize;
 }

@@ -12,6 +12,9 @@ import java.util.UUID;
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ConversationRequest {
+    UUID id;
+    String name;
+    String avatar;
     String type; // private or group
     UUID lastMessageId;
     List<UUID> userIds;
