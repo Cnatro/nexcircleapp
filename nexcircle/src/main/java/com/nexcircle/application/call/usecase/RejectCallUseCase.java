@@ -1,8 +1,10 @@
 package com.nexcircle.application.call.usecase;
 
+import com.nexcircle.application.call.dto.SignalMessage;
 import com.nexcircle.domain.call.entity.CallSession;
 import com.nexcircle.domain.call.repository.CallRepository;
 import com.nexcircle.domain.user.service.SecurityContextService;
+import com.nexcircle.infrastructure.websocket.CallSignalingHandler;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -16,6 +18,7 @@ import java.util.UUID;
 public class RejectCallUseCase {
     SecurityContextService service;
     CallRepository callRepository;
+    CallSignalingHandler signalingHandler;
 
     @Transactional
     public void execute(UUID sessionId) {
@@ -25,6 +28,26 @@ public class RejectCallUseCase {
 
         session.reject();
         callRepository.saveCallSession(session);
+
+//        SignalMessage rejectSignal = SignalMessage.builder()
+//                .type("REJECT_CALL")
+//                .fromUserId(userId.toString())
+//                .toUserId(session.getCaller().getId())
+//                .sessionId(session.getId())
+//                .build();
+//
+//        signalingHandler.sendSignal(session.getCaller().getId(), rejectSignal);
+
+        UUID otherUserId = callRepository.findOtherParticipant(sessionId, userId);
+
+        SignalMessage rejectSignal = SignalMessage.builder()
+                .type("REJECT_CALL")
+                .fromUserId(userId.toString())
+                .toUserId(otherUserId)
+                .sessionId(session.getId())
+                .build();
+
+        signalingHandler.sendSignal(otherUserId, rejectSignal);
 
     }
 }

@@ -10,6 +10,7 @@ import com.nexcircle.domain.call.repository.CallRepository;
 import com.nexcircle.domain.user.entity.User;
 import com.nexcircle.domain.user.repository.UserRepository;
 import com.nexcircle.domain.user.service.SecurityContextService;
+import com.nexcircle.infrastructure.websocket.CallSignalingHandler;
 import com.nexcircle.shared.enums.MessageCode;
 import com.nexcircle.shared.exception.AppException;
 import lombok.AccessLevel;
@@ -30,6 +31,7 @@ public class InitiateCallUseCase {
     UserRepository userRepository;
     CallMapper callMapper;
     SecurityContextService service;
+    CallSignalingHandler signalingHandler;
 
     @Transactional
     public CallResponse execute(CallRequest request){
@@ -49,14 +51,17 @@ public class InitiateCallUseCase {
                 .build();
         callRepository.saveParticipant(participant);
 
-//        SignalMessage ringSignal = SignalMessage.builder()
-//                .type("INCOMING_CALL")
-//                .fromUserId(session.getCaller().getId().toString())
-//                .toUserId(request.getReceiverId())
-//                .sessionId(session.getId())
-//                .build();
-//
-//        signalingHandler.sendSignal(request.getReceiverId(), ringSignal);
+        CallResponse response = callMapper.toCallResponse(savedSession);
+
+        SignalMessage ringSignal = SignalMessage.builder()
+                .type("INCOMING_CALL")
+                .fromUserId(session.getCaller().getId().toString())
+                .toUserId(request.getReceiverId())
+                .sessionId(session.getId())
+                .data(response)
+                .build();
+
+        signalingHandler.sendSignal(request.getReceiverId(), ringSignal);
 
         return callMapper.toCallResponse(savedSession);
     }

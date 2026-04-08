@@ -1,9 +1,11 @@
 package com.nexcircle.application.call.usecase;
 
 import com.nexcircle.application.call.dto.CallResponse;
+import com.nexcircle.application.call.dto.SignalMessage;
 import com.nexcircle.application.call.mapper.CallMapper;
 import com.nexcircle.domain.call.repository.CallRepository;
 import com.nexcircle.domain.user.service.SecurityContextService;
+import com.nexcircle.infrastructure.websocket.CallSignalingHandler;
 import com.nexcircle.shared.enums.MessageCode;
 import com.nexcircle.shared.exception.AppException;
 import lombok.AccessLevel;
@@ -24,6 +26,7 @@ public class AcceptCallUseCase {
     CallRepository callRepository;
     SecurityContextService service;
     CallMapper mapper;
+    CallSignalingHandler signalingHandler;
 
     @Transactional
     public CallResponse execute(UUID sessionId){
@@ -40,6 +43,26 @@ public class AcceptCallUseCase {
         session.accept();
         callRepository.updateParticipantStatus(sessionId, userId, LocalDateTime.now(), null);
         callRepository.saveCallSession(session);//cap nhat trang thai accept
+
+//        SignalMessage acceptSignal = SignalMessage.builder()
+//                .type("ACCEPT_CALL")
+//                .fromUserId(userId.toString())
+//                .toUserId(session.getCaller().getId())
+//                .sessionId(session.getId())
+//                .build();
+//
+//
+
+        UUID otherUserId = callRepository.findOtherParticipant(sessionId, userId);
+
+        SignalMessage acceptSignal = SignalMessage.builder()
+                .type("ACCEPT_CALL")
+                .fromUserId(userId.toString())
+                .toUserId(otherUserId)
+                .sessionId(session.getId())
+                .build();
+
+        signalingHandler.sendSignal(otherUserId, acceptSignal);
 
         return mapper.toCallResponse(session);
     }

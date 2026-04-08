@@ -3,6 +3,8 @@ package com.nexcircle.application.call.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -11,6 +13,7 @@ import lombok.experimental.FieldDefaults;
 public class SignalMessage {
     String type;        // "OFFER", "ANSWER", "ICE_CANDIDATE"
      String fromUserId;
-     String toUserId;
+     UUID toUserId;
+     UUID sessionId;
      Object data;        // Chứa thông tin kỹ thuật WebRTC (SDP/ICE)
 }

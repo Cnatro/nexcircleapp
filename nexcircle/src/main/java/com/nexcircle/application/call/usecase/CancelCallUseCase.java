@@ -1,9 +1,11 @@
 package com.nexcircle.application.call.usecase;
 
+import com.nexcircle.application.call.dto.SignalMessage;
 import com.nexcircle.domain.call.entity.CallSession;
 import com.nexcircle.domain.call.repository.CallRepository;
 import com.nexcircle.domain.user.entity.User;
 import com.nexcircle.domain.user.service.SecurityContextService;
+import com.nexcircle.infrastructure.websocket.CallSignalingHandler;
 import com.nexcircle.shared.enums.MessageCode;
 import com.nexcircle.shared.exception.AppException;
 import lombok.AccessLevel;
@@ -20,6 +22,7 @@ import java.util.UUID;
 public class CancelCallUseCase {
     CallRepository callRepository;
     SecurityContextService service;
+    CallSignalingHandler signalingHandler;
 
     @Transactional
     public void execute(UUID sessionId){
@@ -30,6 +33,29 @@ public class CancelCallUseCase {
             throw new AppException(MessageCode.UNAUTHORIZED, "User not permission access");
 
         session.cancel();
+
+//        UUID otherUserId = callRepository.findOtherParticipant(sessionId, userId);
+//
+////        SignalMessage cancelSignal = SignalMessage.builder()
+////                .type("CANCEL_CALL")
+////                .fromUserId(userId.toString())
+////                .toUserId(session.getReceiver().getId()) // ⚠️ cần có receiver
+////                .sessionId(session.getId())
+////                .build();
+////
+////        signalingHandler.sendSignal(session.getReceiver().getId(), cancelSignal);
+
+        UUID otherUserId = callRepository.findOtherParticipant(sessionId, userId);
+
+        SignalMessage cancelSignal = SignalMessage.builder()
+                .type("CANCEL_CALL")
+                .fromUserId(userId.toString())
+                .toUserId(otherUserId)
+                .sessionId(session.getId())
+                .build();
+
+        signalingHandler.sendSignal(otherUserId, cancelSignal);
+
         callRepository.saveCallSession(session);
     }
 }

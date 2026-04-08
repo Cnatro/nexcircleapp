@@ -9,7 +9,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @Configuration
 @EnableWebSocket
 @RequiredArgsConstructor
-public class WebSocketConfig implements WebSocketConfigurer {
+public class CallWebSocketConfig implements WebSocketConfigurer {
     private final CallSignalingHandler signalingHandler;
 
     @Override

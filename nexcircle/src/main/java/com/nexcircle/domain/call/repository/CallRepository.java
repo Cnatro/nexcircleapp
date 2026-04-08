@@ -14,4 +14,5 @@ public interface CallRepository {
     boolean isParticipant(UUID sessionId, UUID userId);
     void updateParticipantStatus(UUID sessionId, UUID userId, LocalDateTime joinedAt, LocalDateTime leftAt);
     CallSession findAndVerifyParticipant(UUID sessionId, UUID userId);
+    UUID findOtherParticipant(UUID sessionId, UUID currentUserId);
 }

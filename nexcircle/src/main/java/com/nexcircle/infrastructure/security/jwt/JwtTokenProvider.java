@@ -67,4 +67,16 @@ public class JwtTokenProvider {
         final String username = this.extractUsername(token);
         return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
     };
+
+    // bởi vì callvideo không thể truyền vào userdetails
+    public Boolean validateTokenOnly(String token) {
+        try {
+            // Chỉ cần extract được Username và check Expired là đủ để biết Token do mình phát hành và còn hạn
+            String username = extractUsername(token);
+            return (username != null && !isTokenExpired(token));
+        } catch (Exception e) {
+//            log.error("Token validation failed: {}", e.getMessage());
+            return false;
+        }
+    }
 }

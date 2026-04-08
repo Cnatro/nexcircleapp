@@ -13,6 +13,8 @@ import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -55,5 +57,15 @@ public class CallController {
     public ApiResponse<Void> cancelCall(@PathVariable UUID sessionId) {
         cancelCallUseCase.execute(sessionId);
         return ResponseFactory.success(MessageCode.CALL_CANCEL, null);
+    }
+
+    @GetMapping("/ice-servers")
+    public ApiResponse<List<Map<String, Object>>> getIceServers() {
+        // Senior tip: Bạn có thể dùng free STUN của Google
+        List<Map<String, Object>> iceServers = List.of(
+                Map.of("urls", "stun:stun.l.google.com:19302"),
+                Map.of("urls", "stun:stun1.l.google.com:19302")
+        );
+        return ResponseFactory.success(MessageCode.SUCCESS, iceServers);
     }
 }

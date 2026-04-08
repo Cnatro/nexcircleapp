@@ -69,4 +69,14 @@ public class CallRepositoryImpl implements CallRepository {
         }
         return session;
     }
+
+    @Override
+    public UUID findOtherParticipant(UUID sessionId, UUID currentUserId) {
+        return callParticipantJpaRepository.findByCallSessionId(sessionId)
+                .stream()
+                .map(p -> p.getUser().getId())
+                .filter(id -> !id.equals(currentUserId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No other participant found"));
+    }
 }
