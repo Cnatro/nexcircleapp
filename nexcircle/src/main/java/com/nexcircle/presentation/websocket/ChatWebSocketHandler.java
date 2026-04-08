@@ -31,8 +31,8 @@ public class ChatWebSocketHandler {
 
     @MessageMapping("/send/private")
     public void sendToUser(@Payload SendMessRequest request){
-        System.out.println("HIT HERE");
-            UserResponse userReceipt = this.loadUserUseCase.getUserReceiptMessage(request);
+
+            UserResponse userReceipt = this.loadUserUseCase.findUserById(request.getReceiverId());
             MessageResponse res = this.sendMessUseCase.sendMessage(request);
 
             this.simpMessagingTemplate.convertAndSendToUser(
