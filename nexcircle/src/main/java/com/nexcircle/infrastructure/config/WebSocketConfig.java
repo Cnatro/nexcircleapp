@@ -2,7 +2,6 @@ package com.nexcircle.infrastructure.config;
 
 import com.nexcircle.infrastructure.security.jwt.JwtTokenProvider;
 import com.nexcircle.infrastructure.security.user.CustomUserDetailsService;
-import com.nexcircle.infrastructure.security.user.UserDetails;
 import com.sun.security.auth.UserPrincipal;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -20,6 +19,7 @@ import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -35,7 +35,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/group", "/private", "/user");
+        registry.enableSimpleBroker("/group", "/private");
         registry.setApplicationDestinationPrefixes("/messages");
         registry.setUserDestinationPrefix("/user");
 
