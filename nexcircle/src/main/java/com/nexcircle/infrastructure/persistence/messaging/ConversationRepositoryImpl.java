@@ -42,4 +42,9 @@ public class ConversationRepositoryImpl implements ConversationRepository {
                 .findExactConversation(userIds,szie, type)
                 .map(this.conversationPersistenceMapper::toConversationEntity);
     }
+
+    @Override
+    public Optional<Conversation> findById(UUID id) {
+        return this.conversationJpaRepository.findById(id).map(this.conversationPersistenceMapper::toConversationEntity);
+    }
 }

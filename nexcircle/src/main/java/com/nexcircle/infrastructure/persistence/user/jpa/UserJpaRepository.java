@@ -20,5 +20,41 @@ public interface UserJpaRepository extends JpaRepository<UserJpaEntity, UUID> {
                   and cp.user_id <> :userSenderId
             """, nativeQuery = true)
     UserJpaEntity findUserReceiptMessageByConversationIdAndUserId(UUID converId, UUID userSenderId);
-    Page<UserJpaEntity> findByIdNot(UUID currentUserId, Pageable pageable);
+
+    @Query(value = """
+            SELECT u.*
+            FROM users u
+            WHERE u.id <> :currentUserId
+              AND NOT EXISTS (
+                SELECT 1
+                FROM friend_requests fr
+                WHERE ((fr.sender_id = :currentUserId AND fr.receiver_id = u.id)
+                    OR (fr.sender_id = u.id AND fr.receiver_id = :currentUserId))
+                  AND fr.status <> 'declined'
+              )
+              AND NOT EXISTS (
+                SELECT 1
+                FROM friendships f
+                WHERE (f.user1_id = :currentUserId AND f.user2_id = u.id and f.status = 'active')
+                   OR (f.user2_id = :currentUserId AND f.user1_id = u.id and f.status = 'active')
+              )
+            """,
+            countQuery = """
+                    SELECT COUNT(*)
+                                FROM users u
+                                WHERE u.id <> :currentUserId
+                                  AND NOT EXISTS (
+                                      SELECT 1
+                                      FROM friend_requests fr
+                                      WHERE (fr.sender_id = :currentUserId OR fr.receiver_id = :currentUserId)
+                                        AND fr.status <> 'declined'
+                                  )
+                                  AND NOT EXISTS (
+                                      SELECT 1
+                                      FROM friendships f
+                                      WHERE :currentUserId = f.user1_id OR :currentUserId = f.user2_id
+                                  )
+                    """,
+            nativeQuery = true)
+    Page<UserJpaEntity> findUsersNotFriendOrPending(UUID currentUserId, Pageable pageable);
 }
