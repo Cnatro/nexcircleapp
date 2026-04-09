@@ -1,10 +1,10 @@
 package com.nexcircle.presentation.controller;
 
-import com.nexcircle.application.user.dto.AcceptFriendRequestDto;
+import com.nexcircle.application.user.dto.StatusFriendRequestDto;
 import com.nexcircle.application.user.dto.FriendRequestDto;
 import com.nexcircle.application.user.dto.FriendRequestFilter;
 import com.nexcircle.application.user.dto.FriendRqResponseDto;
-import com.nexcircle.application.user.usecase.AcceptFriendRequestUseCase;
+import com.nexcircle.application.user.usecase.HandleFriendRequestUseCase;
 import com.nexcircle.application.user.usecase.GetSentFriendRequestsUseCase;
 import com.nexcircle.application.user.usecase.SendFriendRequestUseCase;
 import com.nexcircle.shared.dto.ApiResponse;
@@ -27,7 +27,7 @@ import java.util.Map;
 public class FriendRequestController {
     SendFriendRequestUseCase sendFriendRequestUseCase;
     GetSentFriendRequestsUseCase getSentFriendRequestsUseCase;
-    AcceptFriendRequestUseCase acceptFriendRequestUseCase;
+    HandleFriendRequestUseCase handleFriendRequestUseCase;
 
     @PostMapping
     public ApiResponse<String> sentFrRequest(@RequestBody FriendRequestDto dto) {
@@ -52,8 +52,18 @@ public class FriendRequestController {
     }
 
     @PatchMapping("/accept")
-    public ApiResponse<String> acceptFriendRequest(@RequestBody AcceptFriendRequestDto dto) {
-        this.acceptFriendRequestUseCase.acceptFriendRequest(dto);
+    public ApiResponse<String> acceptFriendRequest(@RequestBody StatusFriendRequestDto dto) {
+        this.handleFriendRequestUseCase.acceptFriendRequest(dto);
+
+        return ResponseFactory.success(
+                MessageCode.SUCCESS,
+                null
+        );
+    }
+
+    @PatchMapping("/decline")
+    public ApiResponse<String> declinedFriendRequest(@RequestBody StatusFriendRequestDto dto) {
+        this.handleFriendRequestUseCase.declinedFriendRequest(dto);
 
         return ResponseFactory.success(
                 MessageCode.SUCCESS,

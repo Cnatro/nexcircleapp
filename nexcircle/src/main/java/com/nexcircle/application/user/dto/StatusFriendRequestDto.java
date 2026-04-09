@@ -10,7 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AcceptFriendRequestDto {
+public class StatusFriendRequestDto {
     UUID id; // friendRequest id
     String status; // pending/ accepted, declined'
 }

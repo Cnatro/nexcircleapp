@@ -7,10 +7,10 @@ import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Getter @NoArgsConstructor @AllArgsConstructor @Builder
+@Getter @Setter @NoArgsConstructor @AllArgsConstructor @Builder
 public class UserDevice {
     private UUID id;
-    private UserJpaEntity user;
+    private User user;
     private String deviceToken;
     private String platform;
     private LocalDateTime lastLogin;

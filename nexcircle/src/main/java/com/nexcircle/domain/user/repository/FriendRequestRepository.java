@@ -10,6 +10,6 @@ import java.util.UUID;
 
 public interface FriendRequestRepository {
     FriendRequest save(FriendRequest friendRequest);
-    FriendRequestInfoProjection updateAndReturn(UUID id);
+    FriendRequestInfoProjection updateStatusAndReturn(UUID id, String status);
     Page<FriendRequestSummaryProjection> findAllByStatusAndReceiverId(String status, UUID receiverId, Pageable pageable);
 }

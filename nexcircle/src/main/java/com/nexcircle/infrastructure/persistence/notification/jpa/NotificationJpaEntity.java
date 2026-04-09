@@ -19,12 +19,7 @@ public class NotificationJpaEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private UserJpaEntity user;
 
-    @ManyToOne
-    @JoinColumn(name = "sender_id")
-    private UserJpaEntity sender;
-
     private String type;
-    private UUID referenceId;
     private String title;
 
     @Column(columnDefinition = "TEXT")

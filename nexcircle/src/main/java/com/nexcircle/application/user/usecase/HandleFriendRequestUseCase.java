@@ -1,10 +1,8 @@
 package com.nexcircle.application.user.usecase;
 
-import com.nexcircle.application.user.dto.AcceptFriendRequestDto;
-import com.nexcircle.application.user.dto.FriendRequestDto;
+import com.nexcircle.application.user.dto.StatusFriendRequestDto;
 import com.nexcircle.application.user.mapper.FriendShipMapper;
 import com.nexcircle.application.user.mapper.UserMapper;
-import com.nexcircle.domain.user.entity.FriendRequest;
 import com.nexcircle.domain.user.entity.Friendship;
 import com.nexcircle.domain.user.repository.FriendRequestRepository;
 import com.nexcircle.domain.user.repository.FriendshipRepository;
@@ -21,14 +19,18 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @Slf4j
-public class AcceptFriendRequestUseCase {
+public class HandleFriendRequestUseCase {
     FriendshipRepository friendshipRepository;
     FriendShipMapper shipMapper;
     UserMapper userMapper;
     FriendRequestRepository friendRequestRepository;
 
-    public void acceptFriendRequest(AcceptFriendRequestDto request){
-        FriendRequestInfoProjection infoProjection = this.friendRequestRepository.updateAndReturn(request.getId());
+    public void acceptFriendRequest(StatusFriendRequestDto request){
+        if (!"accepted".equals(request.getStatus())) {
+            throw new AppException(MessageCode.INVALID_FRIEND_REQUEST_STATUS);
+        }
+
+        FriendRequestInfoProjection infoProjection = this.friendRequestRepository.updateStatusAndReturn(request.getId(), request.getStatus());
 
         if (infoProjection == null) {
             throw new AppException(MessageCode.FRIEND_REQUEST_NOT_FOUND);
@@ -44,5 +46,13 @@ public class AcceptFriendRequestUseCase {
         friendship.setStatus("active");
 
         this.friendshipRepository.save(friendship);
+    }
+
+    public void declinedFriendRequest(StatusFriendRequestDto request){
+        if (!"declined".equals(request.getStatus())) {
+            throw new AppException(MessageCode.INVALID_FRIEND_REQUEST_STATUS);
+        }
+
+        FriendRequestInfoProjection infoProjection = this.friendRequestRepository.updateStatusAndReturn(request.getId(), request.getStatus());
     }
 }
