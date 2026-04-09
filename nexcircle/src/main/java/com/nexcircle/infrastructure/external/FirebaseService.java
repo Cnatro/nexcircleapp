@@ -34,10 +34,10 @@ public class FirebaseService {
     public void init() throws IOException {
         // Load file từ classpath
         InputStream serviceAccount = getClass().getClassLoader()
-                .getResourceAsStream("firebase/nexcircleapp-firebase-adminsdk-fbsvc-f9b86844f9.json");
+                .getResourceAsStream("firebase/nexcircleapp-firebase-adminsdk-fbsvc-2ed9490556.json");
 
         if(serviceAccount == null) {
-            throw new IOException("Not found nexcircleapp-firebase-adminsdk-fbsvc-f9b86844f9.json trong resources/firebase");
+            throw new IOException("Not found nexcircleapp-firebase-adminsdk-fbsvc-2ed9490556.json trong resources/firebase");
         }
 
         FirebaseOptions options = FirebaseOptions.builder()
