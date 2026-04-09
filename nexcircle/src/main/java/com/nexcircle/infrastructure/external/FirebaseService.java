@@ -32,7 +32,7 @@ public class FirebaseService {
 
     @PostConstruct
     public void init() throws IOException {
-        // Load file từ classpath
+
         InputStream serviceAccount = getClass().getClassLoader()
                 .getResourceAsStream("firebase/nexcircleapp-firebase-adminsdk-fbsvc-2ed9490556.json");
 
