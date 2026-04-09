@@ -12,7 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,14 +33,16 @@ public class ChatWebSocketHandler {
     }
 
     @MessageMapping("/send/private")
-    public void sendToUser(@Payload SendMessRequest request){
+    public void sendToUser(@Payload SendMessRequest request,@AuthenticationPrincipal Principal principal){
 
             UserResponse userReceipt = this.loadUserUseCase.findUserById(request.getReceiverId());
             MessageResponse res = this.sendMessUseCase.sendMessage(request);
 
+            log.info("Sending message to user: {}", userReceipt.getUsername());
+            log.info("Sender username (from Principal): {}", principal.getName());
             this.simpMessagingTemplate.convertAndSendToUser(
                     userReceipt.getUsername(),
-                    "/private/messages",
+                    "/private/messages/" + request.getConversationId(),
                     res
             );
     }

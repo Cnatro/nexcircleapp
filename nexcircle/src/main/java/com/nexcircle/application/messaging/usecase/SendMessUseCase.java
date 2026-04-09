@@ -19,6 +19,7 @@ public class SendMessUseCase {
 
     public MessageResponse sendMessage(SendMessRequest request){
         Message mess = this.messageMapper.toEntity(request);
+
         return this.messageMapper.toDto(this.messageRepository.save(mess));
     }
 

@@ -18,6 +18,7 @@ public interface MessageMapper {
     @Mapping(source = "conversationId", target = "conversation")
     Message toEntity(SendMessRequest request);
 
+    @Mapping(source = "sender.id", target = "senderId")
     MessageResponse toDto(Message message);
 
     MessageView toMessageView(Message message);
