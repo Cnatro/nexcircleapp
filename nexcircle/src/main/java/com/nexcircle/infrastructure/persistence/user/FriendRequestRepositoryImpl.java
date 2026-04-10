@@ -31,8 +31,8 @@ public class FriendRequestRepositoryImpl implements FriendRequestRepository {
     }
 
     @Override
-    public FriendRequestInfoProjection updateAndReturn(UUID id) {
-        return this.jpaRepository.updateAndReturn(id);
+    public FriendRequestInfoProjection updateStatusAndReturn(UUID id, String status) {
+        return this.jpaRepository.updateStatusAndReturn(id, status);
     }
 
     @Override

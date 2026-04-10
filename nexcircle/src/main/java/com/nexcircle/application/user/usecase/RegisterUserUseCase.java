@@ -1,5 +1,6 @@
 package com.nexcircle.application.user.usecase;
 
+import com.nexcircle.application.notification.usecase.UserDeviceService;
 import com.nexcircle.application.user.dto.UserRegister;
 import com.nexcircle.application.user.dto.UserResponse;
 import com.nexcircle.application.user.mapper.UserMapper;
@@ -20,6 +21,7 @@ public class RegisterUserUseCase {
     UserRepository userRepository;
     UserMapper userMapper;
     PasswordEncoder passwordEncoder;
+    UserDeviceService userDeviceService;
 
     public UserResponse registerUser(UserRegister userRegister){
         log.debug("Register user");
@@ -29,8 +31,12 @@ public class RegisterUserUseCase {
                 userRegister.getPassword()
         );
         u.encodePassword(this.passwordEncoder.encode(userRegister.getPassword()));
+        User saved = this.userRepository.save(u);
 
-//        u.setPassword(this.passwordEncoder.encode(userRegister.getPassword()));
-        return this.userMapper.toDto(this.userRepository.save(u));
+        if (userRegister.getUserDeviceDto() != null){
+            this.userDeviceService.createUserDevice(saved.getId(),userRegister.getUserDeviceDto());
+        }
+
+        return this.userMapper.toDto(saved);
     }
 }

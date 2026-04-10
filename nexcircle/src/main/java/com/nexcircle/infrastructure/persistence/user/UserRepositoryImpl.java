@@ -54,7 +54,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Page<User> findNearByUsers(UUID currentUserId, Pageable pageable) {
         return this.userJpaRepository
-                .findByIdNot(currentUserId,pageable)
+                .findUsersNotFriendOrPending(currentUserId,pageable)
                 .map(this.userMapper::toUserDomain);
     }
 }

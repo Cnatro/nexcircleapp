@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -37,5 +38,10 @@ public class FriendshipRepositoryImpl implements FriendshipRepository {
     @Override
     public boolean isExistsFriendship(UUID user1Id, UUID user2Id) {
         return this.jpaRepository.existsFriendship(user1Id,user2Id);
+    }
+
+    @Override
+    public Optional<Friendship> findById(UUID id) {
+        return this.jpaRepository.findById(id).map(this.persistenceMapper::toDomain);
     }
 }

@@ -34,9 +34,9 @@ public interface FriendRequestJpaRepository extends JpaRepository<FriendRequestJ
 
     @Query(value = """
             UPDATE friend_requests
-                 SET status = 'accepted'
+                 SET status = :status
                  WHERE id = :id
                  RETURNING sender_id as senderId, receiver_id as receiverId
             """, nativeQuery = true)
-    FriendRequestInfoProjection updateAndReturn(UUID id);
+    FriendRequestInfoProjection updateStatusAndReturn(UUID id, String status);
 }

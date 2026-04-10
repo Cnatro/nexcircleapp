@@ -1,5 +1,6 @@
 package com.nexcircle.application.user.dto;
 
+import com.nexcircle.application.notification.dto.UserDeviceDto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,4 +13,6 @@ public class UserRegister {
     String email;
     String password;
     String username;
+
+    UserDeviceDto userDeviceDto;
 }

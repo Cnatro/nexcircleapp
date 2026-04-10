@@ -38,7 +38,7 @@ public class GetUserUseCase {
     }
 
     public Page<UserResponse> getNearbyUsers(UserFilter filter){
-        Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize(), Sort.by("createdAt").descending());
+        Pageable pageable = PageRequest.of(filter.getPage(), filter.getSize(), Sort.by("created_at").descending());
 
         return this.userRepository.findNearByUsers(this.securityContextService.getCurrentUserId(), pageable).map(this.userMapper::toDto);
     }

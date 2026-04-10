@@ -11,4 +11,5 @@ public interface ConversationRepository {
     Conversation save(Conversation conversation);
     List<ConversationListItemProjection> findAllConversationWithUserLogin(UUID userId);
     Optional<Conversation> findExactConversation(List<UUID> userIds, long szie, String type);
+    Optional<Conversation> findById(UUID id);
 }
