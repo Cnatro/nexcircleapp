@@ -30,9 +30,9 @@ public class ConversationController {
     UpdateConversationUseCase updateConversationUseCase;
 
     @PostMapping
-    public ApiResponse<ConversationResponse> createConversation(@RequestBody ConversationRequest request) {
+    public ApiResponse<ConversationListItemDto> createConversation(@RequestBody ConversationRequest request) {
         log.debug("create conversation");
-        ConversationResponse response = this.createConversationUseCase.createConversation(request);
+        ConversationListItemDto response = this.createConversationUseCase.createConversation(request);
         return ResponseFactory.success(
                 MessageCode.CREATED_SUCCESS,
                 response
@@ -40,7 +40,7 @@ public class ConversationController {
     }
 
     @GetMapping
-    public ApiResponse<List<ConversationListItemDto>> findAllConversationWithUserLogin(){
+    public ApiResponse<List<ConversationListItemDto>> findAllConversationWithUserLogin() {
         List<ConversationListItemDto> responses = this.conversationUseCase.findAllConversationWithUserLogin();
 
         return ResponseFactory.success(
@@ -53,10 +53,21 @@ public class ConversationController {
     public ApiResponse<ConversationResponse> UpdateMessageConversation(@PathVariable UUID conversationId, @RequestBody UpdateConversation request) {
         log.debug("create conversation");
 
-        if(request.getConversationId() == null)
+        if (request.getConversationId() == null)
             request.setConversationId(conversationId);
 
         ConversationResponse response = this.updateConversationUseCase.updateConversation(request);
+        return ResponseFactory.success(
+                MessageCode.SUCCESS,
+                response
+        );
+    }
+
+    @GetMapping("/{conversationId}")
+    public ApiResponse<ConversationListItemDto> getDetailConversation(@PathVariable UUID conversationId) {
+        log.debug("create conversation");
+
+        ConversationListItemDto response = this.conversationUseCase.getDetail(conversationId);
         return ResponseFactory.success(
                 MessageCode.SUCCESS,
                 response

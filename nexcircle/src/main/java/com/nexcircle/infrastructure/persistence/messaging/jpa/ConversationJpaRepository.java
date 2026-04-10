@@ -88,4 +88,40 @@ public interface ConversationJpaRepository extends JpaRepository<ConversationJpa
             @Param("size") long size,
             @Param("type") String type
     );
+
+    @Query(value = """
+                select
+                    c.id,
+                    c.type,
+                    c.name,
+                    c.avatar,
+            
+                    p.id as conversation_participant_id,
+                    p.id as user_id,
+                    p.full_name,
+                    p.username,
+                    p.avatar_url,
+                    p.is_online,
+            
+                    lm.id as message_id,
+                    lm.sender_id,
+                    lm.content,
+                    lm.message_type,
+                    lm.created_at,
+                    lm.parent_message_id
+            
+                from conversations c
+            
+                left join conversation_participants cp 
+                    on cp.conversation_id = c.id
+            
+                left join users p 
+                    on p.id = cp.user_id
+            
+                left join messages lm 
+                    on lm.id = c.last_message_id
+            
+                where c.id = :conversationId
+            """, nativeQuery = true)
+    List<ConversationListItemProjection> findConversationDetail(UUID conversationId);
 }

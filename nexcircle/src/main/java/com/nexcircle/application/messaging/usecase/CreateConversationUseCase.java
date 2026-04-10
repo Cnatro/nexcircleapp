@@ -1,5 +1,6 @@
 package com.nexcircle.application.messaging.usecase;
 
+import com.nexcircle.application.messaging.dto.ConversationListItemDto;
 import com.nexcircle.application.messaging.dto.ConversationRequest;
 import com.nexcircle.application.messaging.dto.ConversationResponse;
 import com.nexcircle.application.messaging.mapper.ConversationMapper;
@@ -26,8 +27,9 @@ public class CreateConversationUseCase {
     ConversationParticipantRepository conversationParticipantRepository;
     ConversationMapper conversationMapper;
     SecurityContextService securityContextService;
+    GetConversationUseCase getConversationUseCase;
 
-    public ConversationResponse createConversation(ConversationRequest request) {
+    public ConversationListItemDto createConversation(ConversationRequest request) {
 
         Set<UUID> userSet = new HashSet<>(request.getUserIds());
         userSet.add(this.securityContextService.getCurrentUserId());
@@ -39,7 +41,7 @@ public class CreateConversationUseCase {
                         .findExactConversation(allUserIds, allUserIds.size(),request.getType());
 
         if(existingConversation.isPresent()){
-            return this.conversationMapper.toDto(existingConversation.get());
+            return this.getConversationUseCase.getDetail(existingConversation.get().getId());
         }
 
         Conversation conversation = this.conversationMapper.toEntity(request);
@@ -54,7 +56,7 @@ public class CreateConversationUseCase {
                 ).toList();
 
         this.conversationParticipantRepository.saveAll(conversationParticipants);
-        return this.conversationMapper.toDto(conversation);
+        return this.getConversationUseCase.getDetail(savedConversation.getId());
     }
 
 

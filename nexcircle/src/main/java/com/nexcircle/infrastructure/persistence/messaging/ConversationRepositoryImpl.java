@@ -47,4 +47,9 @@ public class ConversationRepositoryImpl implements ConversationRepository {
     public Optional<Conversation> findById(UUID id) {
         return this.conversationJpaRepository.findById(id).map(this.conversationPersistenceMapper::toConversationEntity);
     }
+
+    @Override
+    public List<ConversationListItemProjection> findConversationDetail(UUID conversationId) {
+        return this.conversationJpaRepository.findConversationDetail(conversationId);
+    }
 }
