@@ -11,6 +11,6 @@ public class Friendship {
     private UUID id;
     private User user1;
     private User user2;
-    private String status;
+    private String status; //active, unfriend, blocked
     private LocalDateTime createdAt;
 }
