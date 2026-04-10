@@ -33,8 +33,15 @@ public class FirebaseService {
     @PostConstruct
     public void init() throws IOException {
 
-        InputStream serviceAccount = getClass().getClassLoader()
-                .getResourceAsStream("firebase/nexcircleapp-firebase-adminsdk-fbsvc-2ed9490556.json");
+        String base64 = System.getenv("FIREBASE_CONFIG_BASE64");
+
+        if (base64 == null || base64.isEmpty()) {
+            throw new RuntimeException("Missing FIREBASE_CONFIG_BASE64 env");
+        }
+        
+        byte[] decoded = Base64.getDecoder().decode(base64);
+        
+        InputStream serviceAccount = new ByteArrayInputStream(decoded);
 
         if(serviceAccount == null) {
             throw new IOException("Not found nexcircleapp-firebase-adminsdk-fbsvc-2ed9490556.json trong resources/firebase");
