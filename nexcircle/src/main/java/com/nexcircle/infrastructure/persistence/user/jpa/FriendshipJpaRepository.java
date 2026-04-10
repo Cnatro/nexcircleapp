@@ -14,7 +14,7 @@ public interface FriendshipJpaRepository extends JpaRepository<FriendshipJpaEnti
             select
                 f.id as id,
                 u.id as userId,
-                u.full_name as fullName,
+                COALESCE(NULLIF(u.full_name, ''), u.username) as fullName,
                 u.avatar_url as avatar
             from friendships f
             join users u

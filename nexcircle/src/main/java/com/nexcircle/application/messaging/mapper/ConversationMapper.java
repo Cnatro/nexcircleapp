@@ -1,9 +1,11 @@
 package com.nexcircle.application.messaging.mapper;
 
+import com.nexcircle.application.messaging.dto.ConversationListItemDto;
 import com.nexcircle.application.messaging.dto.ConversationRequest;
 import com.nexcircle.application.messaging.dto.ConversationResponse;
 import com.nexcircle.application.messaging.dto.UpdateConversation;
 import com.nexcircle.domain.messaging.entity.Conversation;
+import com.nexcircle.infrastructure.persistence.messaging.projection.ConversationListItemProjection;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
@@ -17,7 +19,6 @@ public interface ConversationMapper {
     ConversationResponse toDto(Conversation conversation);
 
     Conversation toUpdateMessage(UpdateConversation request, @MappingTarget Conversation conversation);
-
     default Conversation map(UUID id) {
         if (id == null) return null;
 

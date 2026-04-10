@@ -29,7 +29,7 @@ public class GetConversationUseCase {
         Map<UUID, ConversationListItemDto> map = new LinkedHashMap<>();
 
         results.forEach(r -> {
-            ConversationListItemDto dto = map.computeIfAbsent(r.getId(), id->{
+            ConversationListItemDto dto = map.computeIfAbsent(r.getId(), id -> {
                 ConversationListItemDto d = new ConversationListItemDto();
                 d.setId(id);
                 d.setType(r.getType());
@@ -69,5 +69,61 @@ public class GetConversationUseCase {
         });
 
         return new ArrayList<>(map.values());
+    }
+
+    public ConversationListItemDto getDetail(UUID conversationId) {
+
+        List<ConversationListItemProjection> results =
+                conversationRepository.findConversationDetail(conversationId);
+
+        if (results.isEmpty()) {
+            throw new RuntimeException("Conversation not found");
+        }
+
+        Map<UUID, ConversationListItemDto> map = new LinkedHashMap<>();
+
+        for (ConversationListItemProjection r : results) {
+
+            ConversationListItemDto dto = map.computeIfAbsent(
+                    r.getId(),
+                    id -> {
+                        ConversationListItemDto d = new ConversationListItemDto();
+                        d.setId(r.getId());
+                        d.setType(r.getType());
+                        d.setName(r.getName());
+                        d.setAvatar(r.getAvatar());
+                        d.setParticipants(new ArrayList<>());
+                        d.setUnreadCount(0);
+                        d.setMute(false);
+                        return d;
+                    }
+            );
+
+            if (r.getUserId() != null) {
+                dto.getParticipants().add(
+                        new ConversationParticipantItemDto(
+                                r.getConversationParticipantId(),
+                                r.getUserId(),
+                                r.getFullName(),
+                                r.getUsername(),
+                                r.getAvatarUrl(),
+                                r.getIsOnline()
+                        )
+                );
+            }
+
+            if (r.getMessageId() != null && dto.getLastMessage() == null) {
+                dto.setLastMessage(new MessageResponse(
+                        r.getMessageId(),
+                        r.getSenderId(),
+                        r.getContent(),
+                        r.getMessageType(),
+                        r.getParentMessageId(),
+                        r.getCreatedAt()
+                ));
+            }
+        }
+
+        return map.values().iterator().next();
     }
 }
