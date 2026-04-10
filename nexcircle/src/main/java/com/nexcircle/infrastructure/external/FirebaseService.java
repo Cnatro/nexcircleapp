@@ -92,7 +92,6 @@ public class FirebaseService {
                             .build())
                     .apns(MessageFirebaseDto.Apns.builder()
                             .headers(Map.of(
-                                    "apns-collapse-id", "",
                                     "apns-priority", "10"
                             ))
                             .payload(MessageFirebaseDto.ApnsPayload.builder()
