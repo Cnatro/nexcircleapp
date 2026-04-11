@@ -3,7 +3,9 @@ package com.nexcircle.application.messaging.usecase;
 import com.nexcircle.application.messaging.dto.MessageResponse;
 import com.nexcircle.application.messaging.dto.SendMessRequest;
 import com.nexcircle.application.messaging.mapper.MessageMapper;
+import com.nexcircle.domain.messaging.entity.Conversation;
 import com.nexcircle.domain.messaging.entity.Message;
+import com.nexcircle.domain.messaging.repository.ConversationRepository;
 import com.nexcircle.domain.messaging.repository.MessageRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +18,14 @@ import org.springframework.stereotype.Service;
 public class SendMessUseCase {
     MessageRepository messageRepository;
     MessageMapper messageMapper;
+    ConversationRepository conversationRepository;
 
     public MessageResponse sendMessage(SendMessRequest request){
         Message mess = this.messageMapper.toEntity(request);
+        Message saved = this.messageRepository.save(mess);
 
-        return this.messageMapper.toDto(this.messageRepository.save(mess));
+        Conversation conversation = this.conversationRepository.updateLastMessage(request.getConversationId(), saved.getId());
+        return this.messageMapper.toDto(saved);
     }
 
 //    public MessageResponse sendMessage(SendMessRequest request){
