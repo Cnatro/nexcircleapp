@@ -15,7 +15,7 @@ public interface FriendRequestJpaRepository extends JpaRepository<FriendRequestJ
         select
             fr.id as id,
             u.id as senderId,
-            u.full_name as senderName,
+            COALESCE(NULLIF(u.full_name, ''), u.username) as senderName,
             u.avatar_url as senderAvatar,
             fr.created_at as createdAt
         from friend_requests fr

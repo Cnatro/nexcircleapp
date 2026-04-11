@@ -30,7 +30,7 @@ public interface UserJpaRepository extends JpaRepository<UserJpaEntity, UUID> {
                 FROM friend_requests fr
                 WHERE ((fr.sender_id = :currentUserId AND fr.receiver_id = u.id)
                     OR (fr.sender_id = u.id AND fr.receiver_id = :currentUserId))
-                  AND fr.status <> 'declined'
+                  AND fr.status = 'pending'
               )
               AND NOT EXISTS (
                 SELECT 1
@@ -47,7 +47,7 @@ public interface UserJpaRepository extends JpaRepository<UserJpaEntity, UUID> {
                                       SELECT 1
                                       FROM friend_requests fr
                                       WHERE (fr.sender_id = :currentUserId OR fr.receiver_id = :currentUserId)
-                                        AND fr.status <> 'declined'
+                                        AND fr.status = 'pending'
                                   )
                                   AND NOT EXISTS (
                                       SELECT 1

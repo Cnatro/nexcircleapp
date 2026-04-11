@@ -39,7 +39,7 @@ public class ConversationRepositoryImpl implements ConversationRepository {
     public Optional<Conversation> findExactConversation(List<UUID> userIds, long szie, String type) {
 
         return this.conversationJpaRepository
-                .findExactConversation(userIds,szie, type)
+                .findExactConversation(userIds, szie, type)
                 .map(this.conversationPersistenceMapper::toConversationEntity);
     }
 
@@ -51,5 +51,10 @@ public class ConversationRepositoryImpl implements ConversationRepository {
     @Override
     public List<ConversationListItemProjection> findConversationDetail(UUID conversationId) {
         return this.conversationJpaRepository.findConversationDetail(conversationId);
+    }
+
+    @Override
+    public Conversation updateLastMessage(UUID conversationId, UUID lastmessageId) {
+        return this.conversationPersistenceMapper.toConversationEntity(this.conversationJpaRepository.updateLastMessage(conversationId, lastmessageId));
     }
 }

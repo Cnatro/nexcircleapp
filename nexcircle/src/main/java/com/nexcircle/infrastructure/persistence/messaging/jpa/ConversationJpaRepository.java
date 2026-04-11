@@ -124,4 +124,12 @@ public interface ConversationJpaRepository extends JpaRepository<ConversationJpa
                 where c.id = :conversationId
             """, nativeQuery = true)
     List<ConversationListItemProjection> findConversationDetail(UUID conversationId);
+
+    @Query(value = """
+            UPDATE conversations c
+                SET c.lastMessageId = :messId
+                WHERE c.id = :conId
+            """,
+            nativeQuery = true)
+    ConversationJpaEntity updateLastMessage(UUID conId, UUID messId);
 }
