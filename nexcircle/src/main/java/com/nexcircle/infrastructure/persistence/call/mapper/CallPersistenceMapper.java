@@ -16,6 +16,8 @@ public interface CallPersistenceMapper {
     CallSessionJpaEntity toCallSessionJpaEntity(CallSession domain);
 
     CallParticipant toCallParticipantDomain(CallParticipantJpaEntity jpa);
+    @Mapping(target = "callSession", ignore = true)
+    @Mapping(target = "user", ignore = true)
     CallParticipantJpaEntity toCallParticipantJpaEntity(CallParticipant domain);
 
 }

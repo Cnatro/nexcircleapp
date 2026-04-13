@@ -53,6 +53,9 @@ public class InitiateCallUseCase {
 
         CallResponse response = callMapper.toCallResponse(savedSession);
 
+        response.setReceiverName(receiver.getFullName());
+        response.setReceiverId(receiver.getId());
+
         SignalMessage ringSignal = SignalMessage.builder()
                 .type("INCOMING_CALL")
                 .fromUserId(session.getCaller().getId().toString())

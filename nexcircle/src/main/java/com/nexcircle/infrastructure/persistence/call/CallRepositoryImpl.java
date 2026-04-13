@@ -7,6 +7,7 @@ import com.nexcircle.infrastructure.persistence.call.jpa.CallParticipantJpaRepos
 import com.nexcircle.infrastructure.persistence.call.jpa.CallSessionJpaEntity;
 import com.nexcircle.infrastructure.persistence.call.jpa.CallSessionJpaRepository;
 import com.nexcircle.infrastructure.persistence.call.mapper.CallPersistenceMapper;
+import com.nexcircle.infrastructure.persistence.user.jpa.UserJpaRepository;
 import com.nexcircle.shared.enums.MessageCode;
 import com.nexcircle.shared.exception.AppException;
 import lombok.AccessLevel;
@@ -25,7 +26,7 @@ public class CallRepositoryImpl implements CallRepository {
     CallParticipantJpaRepository callParticipantJpaRepository;
     CallSessionJpaRepository callSessionJpaRepository;
     CallPersistenceMapper mapper;
-
+    UserJpaRepository userJpaRepository;
     @Override
     public CallSession saveCallSession(CallSession callSession) {
         var jpaEntity = mapper.toCallSessionJpaEntity(callSession);
@@ -36,6 +37,15 @@ public class CallRepositoryImpl implements CallRepository {
     @Override
     public void saveParticipant(CallParticipant callParticipant) {
         var jpaEntity = mapper.toCallParticipantJpaEntity(callParticipant);
+        var sessionRef = callSessionJpaRepository.getReferenceById(
+                callParticipant.getCallSession().getId()
+        );
+
+        var userRef = userJpaRepository.getReferenceById(
+                callParticipant.getUser().getId()
+        );
+        jpaEntity.setCallSession(sessionRef);
+        jpaEntity.setUser(userRef);
         callParticipantJpaRepository.save(jpaEntity);
     }
 

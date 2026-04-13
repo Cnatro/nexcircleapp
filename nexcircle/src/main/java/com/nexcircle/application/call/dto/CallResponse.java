@@ -1,5 +1,6 @@
 package com.nexcircle.application.call.dto;
 
+import com.nexcircle.domain.call.enums.CallType;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,9 +13,17 @@ import java.util.UUID;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CallResponse {
-    UUID id;
+    UUID sessionId;
+    UUID callerId;
     String callerName;
-    String type;
+    UUID receiverId;
+    String receiverName;
+    CallType type;
     String status;
     LocalDateTime startedAt;
+    LocalDateTime endedAt;
+    LocalDateTime createdAt;
+//    // optional (WebRTC)
+//    String roomId;
+//    String token;
 }

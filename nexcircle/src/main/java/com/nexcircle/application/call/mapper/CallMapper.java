@@ -8,5 +8,6 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface CallMapper {
     @Mapping(target = "callerName", source = "caller.fullName")
+    @Mapping(target = "callerId", source = "caller.id")
     CallResponse toCallResponse(CallSession callSession);
 }

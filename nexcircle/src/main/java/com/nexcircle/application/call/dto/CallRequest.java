@@ -19,6 +19,6 @@ public class CallRequest {
     @NotNull(message = "Receiver ID is required")
     UUID receiverId;
 
-    @NotBlank(message = "Call type is required")
+    @NotNull(message = "Call type is required")
     CallType type;
 }
