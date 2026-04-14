@@ -127,7 +127,7 @@ public interface ConversationJpaRepository extends JpaRepository<ConversationJpa
 
     @Query(value = """
             UPDATE conversations c
-                SET c.lastMessageId = :messId
+                SET lastMessageId = :messId
                 WHERE c.id = :conId
             """,
             nativeQuery = true)
