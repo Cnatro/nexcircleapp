@@ -24,7 +24,7 @@ public class SendMessUseCase {
         Message mess = this.messageMapper.toEntity(request);
         Message saved = this.messageRepository.save(mess);
 
-        Conversation conversation = this.conversationRepository.updateLastMessage(request.getConversationId(), saved.getId());
+        this.conversationRepository.updateLastMessage(request.getConversationId(), saved.getId());
         return this.messageMapper.toDto(saved);
     }
 

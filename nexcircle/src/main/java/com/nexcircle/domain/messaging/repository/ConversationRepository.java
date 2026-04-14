@@ -13,5 +13,5 @@ public interface ConversationRepository {
     Optional<Conversation> findExactConversation(List<UUID> userIds, long szie, String type);
     Optional<Conversation> findById(UUID id);
     List<ConversationListItemProjection> findConversationDetail(UUID conversationId);
-    Conversation updateLastMessage(UUID conversationId, UUID lastmessageId);
+    int updateLastMessage(UUID conversationId, UUID lastmessageId);
 }

@@ -54,7 +54,7 @@ public class ConversationRepositoryImpl implements ConversationRepository {
     }
 
     @Override
-    public Conversation updateLastMessage(UUID conversationId, UUID lastmessageId) {
-        return this.conversationPersistenceMapper.toConversationEntity(this.conversationJpaRepository.updateLastMessage(conversationId, lastmessageId));
+    public int updateLastMessage(UUID conversationId, UUID lastmessageId) {
+        return this.conversationJpaRepository.updateLastMessage(conversationId, lastmessageId);
     }
 }

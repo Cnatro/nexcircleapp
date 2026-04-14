@@ -5,8 +5,10 @@ import com.nexcircle.infrastructure.persistence.messaging.projection.Conversatio
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -125,11 +127,13 @@ public interface ConversationJpaRepository extends JpaRepository<ConversationJpa
             """, nativeQuery = true)
     List<ConversationListItemProjection> findConversationDetail(UUID conversationId);
 
+    @Modifying
+    @Transactional
     @Query(value = """
-            UPDATE conversations c
-                SET last_message_id  = :messId
-                WHERE c.id = :conId
-            """,
+        UPDATE conversations
+        SET last_message_id = :messId
+        WHERE id = :conId
+        """,
             nativeQuery = true)
-    ConversationJpaEntity updateLastMessage(UUID conId, UUID messId);
+    int updateLastMessage(UUID conId, UUID messId);
 }
