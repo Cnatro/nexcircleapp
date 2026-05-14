@@ -1,0 +1,61 @@
+package com.nexcircle.application.call.usecase;
+
+import com.nexcircle.application.call.dto.SignalMessage;
+import com.nexcircle.domain.call.entity.CallSession;
+import com.nexcircle.domain.call.repository.CallRepository;
+import com.nexcircle.domain.user.entity.User;
+import com.nexcircle.domain.user.service.SecurityContextService;
+import com.nexcircle.infrastructure.websocket.CallSignalingHandler;
+import com.nexcircle.shared.enums.MessageCode;
+import com.nexcircle.shared.exception.AppException;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
+
+@Service
+@RequiredArgsConstructor
+@FieldDefaults(makeFinal = true, level = AccessLevel.PRIVATE)
+public class CancelCallUseCase {
+    CallRepository callRepository;
+    SecurityContextService service;
+    CallSignalingHandler signalingHandler;
+
+    @Transactional
+    public void execute(UUID sessionId){
+        UUID userId = service.getCurrentUserId();
+        CallSession session = callRepository.findCallSessionById(sessionId)
+                .orElseThrow(() -> new AppException(MessageCode.CALL_NOT_FOUND));
+        if(!session.getCaller().getId().equals(userId))
+            throw new AppException(MessageCode.UNAUTHORIZED, "User not permission access");
+
+        session.cancel();
+
+//        UUID otherUserId = callRepository.findOtherParticipant(sessionId, userId);
+//
+////        SignalMessage cancelSignal = SignalMessage.builder()
+////                .type("CANCEL_CALL")
+////                .fromUserId(userId.toString())
+////                .toUserId(session.getReceiver().getId()) // ⚠️ cần có receiver
+////                .sessionId(session.getId())
+////                .build();
+////
+////        signalingHandler.sendSignal(session.getReceiver().getId(), cancelSignal);
+
+        UUID otherUserId = callRepository.findOtherParticipant(sessionId, userId);
+
+        SignalMessage cancelSignal = SignalMessage.builder()
+                .type("CANCEL_CALL")
+                .fromUserId(userId.toString())
+                .toUserId(otherUserId)
+                .sessionId(session.getId())
+                .build();
+
+        signalingHandler.sendSignal(otherUserId, cancelSignal);
+
+        callRepository.saveCallSession(session);
+    }
+}

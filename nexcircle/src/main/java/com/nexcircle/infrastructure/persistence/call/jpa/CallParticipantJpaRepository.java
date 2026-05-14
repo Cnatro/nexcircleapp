@@ -1,0 +1,14 @@
+package com.nexcircle.infrastructure.persistence.call.jpa;
+
+import com.nexcircle.domain.call.entity.CallParticipant;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+public interface CallParticipantJpaRepository extends JpaRepository<CallParticipantJpaEntity, UUID> {
+    Optional<CallParticipantJpaEntity> findByCallSessionIdAndUserId(UUID sessionId, UUID userId);
+    boolean existsByCallSessionIdAndUserId(UUID sessionId, UUID userId);
+    List<CallParticipantJpaEntity> findByCallSessionId(UUID sessionId);
+}
